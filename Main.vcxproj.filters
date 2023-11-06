@@ -44,6 +44,9 @@
     <ClInclude Include="rk1_Utils_demo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data_format.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -63,5 +66,8 @@
     <Image Include="app.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="profile.dat" />
   </ItemGroup>
 </Project>
