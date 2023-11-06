@@ -1,0 +1,4 @@
+D:\C C++\Tank game\Main\x64\Debug\Main.vcxproj.AssemblyReference.cache
+D:\C C++\Tank game\Main\x64\Debug\Main.Form1.resources
+D:\C C++\Tank game\Main\x64\Debug\Main.vcxproj.GenerateResource.cache
+D:\C C++\Tank game\Main\x64\Debug\Main.exe

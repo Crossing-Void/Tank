@@ -1,10 +1,8 @@
 #pragma once
 
-// uncomment to execute the rk1-utils:
-//    #include "rk1_Utils_demo.h"  // shows how the rk1-utils can be used
-
 #include "Header1.h"
 #include "Header2.h"
+#include <math.h>
 
 namespace CppCLRWinFormsProject {
 
@@ -15,9 +13,7 @@ namespace CppCLRWinFormsProject {
   using namespace System::Data;
   using namespace System::Drawing;
 
-  /// <summary>
-  /// Summary for Form1
-  /// </summary>
+  
   public ref class Form1 : public System::Windows::Forms::Form
   {
   public:
@@ -44,18 +40,61 @@ namespace CppCLRWinFormsProject {
         delete components;
       }
     }
-  private: System::Windows::Forms::TextBox^ out_textBox;
-  private: System::Windows::Forms::TextBox^ in_textBox;
-  private: System::Windows::Forms::Button^ button_plus_1;
-  private: System::Windows::Forms::Button^ button_plus_2;
+  private: System::ComponentModel::IContainer^ components;
+  protected:
+
+
+
+
 
   protected:
 
   private:
-    /// <summary>
-    /// Required designer variable.
-    /// </summary>
-    System::ComponentModel::Container^ components;
+    
+
+  private:
+      int systemCounter = 0;
+      double pointX = 0;
+      double pointY = 0;
+      double angle = 1.57;
+      double speed = 0;
+      double angleInterval = 0;
+      double timeInterval = 0.1;
+
+  private: System::Windows::Forms::Timer^ Timer;
+  private: System::Windows::Forms::Button^ Up;
+  private: System::Windows::Forms::Button^ Stop;
+  private: System::Windows::Forms::Button^ Down;
+  private: System::Windows::Forms::Button^ Left;
+  private: System::Windows::Forms::Button^ Right;
+         
+
+      void flushTank(void) {
+          pointX += speed * cos(angle) * timeInterval;
+          pointY += speed * sin(angle) * timeInterval;
+          angle += angleInterval * timeInterval;
+      }
+
+      void plotTank(void) {
+          // e1 is plot, and clear to nothing but bg color lightblue
+          Graphics^ e1 = this->CreateGraphics();
+          e1->Clear(Color::LightBlue);
+          // create pen setting color and width
+          Pen^ pen_B = gcnew Pen(Color::LightPink, 3);
+
+          int radius = 40;
+          int initialX = 200, initialY = 500;
+          int x = pointX, y = pointY;
+
+
+          e1->DrawEllipse(pen_B, initialX + x - radius / 2, initialY - y - radius / 2,
+              radius, radius);
+          int dirX = 30 * cos(angle);
+          int dirY = 30 * sin(angle);
+          e1->DrawLine(pen_B, initialX + x, initialY - y, initialX + x + dirX
+              , initialY - y - dirY);
+
+      }
 
 #pragma region Windows Form Designer generated code
     /// <summary>
@@ -64,66 +103,86 @@ namespace CppCLRWinFormsProject {
     /// </summary>
     void InitializeComponent(void)
     {
-      this->out_textBox = (gcnew System::Windows::Forms::TextBox());
-      this->in_textBox = (gcnew System::Windows::Forms::TextBox());
-      this->button_plus_1 = (gcnew System::Windows::Forms::Button());
-      this->button_plus_2 = (gcnew System::Windows::Forms::Button());
-      this->SuspendLayout();
-      // 
-      // out_textBox
-      // 
-      this->out_textBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-        | System::Windows::Forms::AnchorStyles::Left)
-        | System::Windows::Forms::AnchorStyles::Right));
-      this->out_textBox->Location = System::Drawing::Point(12, 38);
-      this->out_textBox->Multiline = true;
-      this->out_textBox->Name = L"out_textBox";
-      this->out_textBox->Size = System::Drawing::Size(140, 211);
-      this->out_textBox->TabIndex = 0;
-      // 
-      // in_textBox
-      // 
-      this->in_textBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-      this->in_textBox->Location = System::Drawing::Point(172, 38);
-      this->in_textBox->Name = L"in_textBox";
-      this->in_textBox->Size = System::Drawing::Size(100, 20);
-      this->in_textBox->TabIndex = 1;
-      // 
-      // button_plus_1
-      // 
-      this->button_plus_1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-      this->button_plus_1->Location = System::Drawing::Point(172, 68);
-      this->button_plus_1->Name = L"button_plus_1";
-      this->button_plus_1->Size = System::Drawing::Size(75, 23);
-      this->button_plus_1->TabIndex = 2;
-      this->button_plus_1->Text = L"plus 1";
-      this->button_plus_1->UseVisualStyleBackColor = true;
-      this->button_plus_1->Click += gcnew System::EventHandler(this, &Form1::button_plus_1_Click);
-      // 
-      // button_plus_2
-      // 
-      this->button_plus_2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-      this->button_plus_2->Location = System::Drawing::Point(172, 97);
-      this->button_plus_2->Name = L"button_plus_2";
-      this->button_plus_2->Size = System::Drawing::Size(75, 23);
-      this->button_plus_2->TabIndex = 3;
-      this->button_plus_2->Text = L"plus 2";
-      this->button_plus_2->UseVisualStyleBackColor = true;
-      this->button_plus_2->Click += gcnew System::EventHandler(this, &Form1::button_plus_2_Click);
-      // 
-      // Form1
-      // 
-      this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-      this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-      this->ClientSize = System::Drawing::Size(284, 261);
-      this->Controls->Add(this->button_plus_2);
-      this->Controls->Add(this->button_plus_1);
-      this->Controls->Add(this->in_textBox);
-      this->Controls->Add(this->out_textBox);
-      this->Name = L"Form1";
-      this->Text = L"Form1";
-      this->ResumeLayout(false);
-      this->PerformLayout();
+        this->components = (gcnew System::ComponentModel::Container());
+        this->Timer = (gcnew System::Windows::Forms::Timer(this->components));
+        this->Up = (gcnew System::Windows::Forms::Button());
+        this->Stop = (gcnew System::Windows::Forms::Button());
+        this->Down = (gcnew System::Windows::Forms::Button());
+        this->Left = (gcnew System::Windows::Forms::Button());
+        this->Right = (gcnew System::Windows::Forms::Button());
+        this->SuspendLayout();
+        // 
+        // Timer
+        // 
+        this->Timer->Enabled = true;
+        this->Timer->Tick += gcnew System::EventHandler(this, &Form1::Timer_Tick);
+        // 
+        // Up
+        // 
+        this->Up->Location = System::Drawing::Point(764, 43);
+        this->Up->Name = L"Up";
+        this->Up->Size = System::Drawing::Size(100, 50);
+        this->Up->TabIndex = 0;
+        this->Up->Text = L"Up";
+        this->Up->UseVisualStyleBackColor = true;
+        this->Up->Click += gcnew System::EventHandler(this, &Form1::Up_Click);
+        // 
+        // Stop
+        // 
+        this->Stop->Location = System::Drawing::Point(764, 118);
+        this->Stop->Name = L"Stop";
+        this->Stop->Size = System::Drawing::Size(100, 50);
+        this->Stop->TabIndex = 1;
+        this->Stop->Text = L"Stop";
+        this->Stop->UseVisualStyleBackColor = true;
+        this->Stop->Click += gcnew System::EventHandler(this, &Form1::Stop_Click);
+        // 
+        // Down
+        // 
+        this->Down->Location = System::Drawing::Point(764, 190);
+        this->Down->Name = L"Down";
+        this->Down->Size = System::Drawing::Size(100, 50);
+        this->Down->TabIndex = 2;
+        this->Down->Text = L"Down";
+        this->Down->UseVisualStyleBackColor = true;
+        this->Down->Click += gcnew System::EventHandler(this, &Form1::Down_Click);
+        // 
+        // Left
+        // 
+        this->Left->Location = System::Drawing::Point(658, 118);
+        this->Left->Name = L"Left";
+        this->Left->Size = System::Drawing::Size(100, 50);
+        this->Left->TabIndex = 3;
+        this->Left->Text = L"Left";
+        this->Left->UseVisualStyleBackColor = true;
+        this->Left->Click += gcnew System::EventHandler(this, &Form1::Left_Click);
+        // 
+        // Right
+        // 
+        this->Right->Location = System::Drawing::Point(870, 118);
+        this->Right->Name = L"Right";
+        this->Right->Size = System::Drawing::Size(100, 50);
+        this->Right->TabIndex = 4;
+        this->Right->Text = L"Right";
+        this->Right->UseVisualStyleBackColor = true;
+        this->Right->Click += gcnew System::EventHandler(this, &Form1::Right_Click);
+        // 
+        // Form1
+        // 
+        this->AutoScaleDimensions = System::Drawing::SizeF(15, 32);
+        this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+        this->BackColor = System::Drawing::Color::LightBlue;
+        this->ClientSize = System::Drawing::Size(982, 603);
+        this->Controls->Add(this->Right);
+        this->Controls->Add(this->Left);
+        this->Controls->Add(this->Down);
+        this->Controls->Add(this->Stop);
+        this->Controls->Add(this->Up);
+        this->Font = (gcnew System::Drawing::Font(L"Inconsolata", 18));
+        this->Margin = System::Windows::Forms::Padding(8, 6, 8, 6);
+        this->Name = L"Form1";
+        this->Text = L"Tank";
+        this->ResumeLayout(false);
 
     }
 #pragma endregion
@@ -131,19 +190,33 @@ namespace CppCLRWinFormsProject {
    // You can call the functions at a button click. If you prefer, 
     // you can call them by clicking a menu item.
 
-  private: System::Void button_plus_1_Click(System::Object^ sender, System::EventArgs^ e)
-  {
-    int n = Convert::ToInt32(in_textBox->Text);
-    int result = N_header_1::plus_1(n);
-    out_textBox->AppendText(String::Format("plus_1({0})={1}\r\n", n, result));
+ 
+
+  private: System::Void Timer_Tick(System::Object^ sender, System::EventArgs^ e) {
+      flushTank();
+      plotTank();
+      systemCounter++;
   }
-
-  private: System::Void button_plus_2_Click(System::Object^ sender, System::EventArgs^ e)
-  {
-    N_header_2::plus_2_Click(in_textBox, out_textBox);
-  }
-
-
-  }; // end of class Form1
+private: System::Void Up_Click(System::Object^ sender, System::EventArgs^ e) {
+    speed = 5 * 5;
+    angle = 1.57;
+}
+private: System::Void Stop_Click(System::Object^ sender, System::EventArgs^ e) {
+    speed = 0;
+    
+}
+private: System::Void Left_Click(System::Object^ sender, System::EventArgs^ e) {
+    speed = 5 * 5;
+    angle = 3.14;
+}
+private: System::Void Down_Click(System::Object^ sender, System::EventArgs^ e) {
+    speed = 5 * 5;
+    angle = 3.14 + 1.57;
+}
+private: System::Void Right_Click(System::Object^ sender, System::EventArgs^ e) {
+    speed = 5 * 5;
+    angle = 0;
+}
+}; // end of class Form1
 } // end of namespace CppCLRWinFormsProject
 
