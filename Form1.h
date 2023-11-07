@@ -1,17 +1,25 @@
 #pragma once
 
+
 #include "Header1.h"
 #include "Header2.h"
+
 #include "data_format.h"
-#include <stdio.h>
+#define ddf
+#include "lockSystem.h"
 #include <stdlib.h>
-#include <math.h>
 #include <stdio.h>
+#include <math.h>
+
+
+
+bool tracking_enable = 0;
+trackingData tk;
 
 
 // variable
 userData usrData;
-enemyProfile enm[5];
+enemyData enm[5];
 
 weaponProfile wea;
 speedInformation speedInfo;
@@ -89,6 +97,7 @@ namespace CppCLRWinFormsProject {
   private: System::Windows::Forms::Label^ label2;
   private: System::Windows::Forms::Label^ label1;
   private: System::Windows::Forms::Button^ Fire;
+  private: System::Windows::Forms::Button^ Lock;
 
   private: System::Windows::Forms::Button^ Right;
          
@@ -236,7 +245,14 @@ namespace CppCLRWinFormsProject {
               }
           }
 
-
+          if (tracking_enable == 1)
+          {
+              tk = lockSystem(usrData, enm);
+              usrData.pos.angle = tk.pos.angle;
+          }
+          usrData.pos.pointX = usrData.pos.pointX + usrData.speed.speed * cos(usrData.pos.angle) * timeInterval;
+          usrData.pos.pointY = usrData.pos.pointY + usrData.speed.speed * sin(usrData.pos.angle) * timeInterval;
+          usrData.pos.angle = usrData.pos.angle + usrData.speed.angleInterval * timeInterval;
 
           
 
@@ -340,6 +356,7 @@ void InitializeComponent(void)
     this->label2 = (gcnew System::Windows::Forms::Label());
     this->label1 = (gcnew System::Windows::Forms::Label());
     this->Fire = (gcnew System::Windows::Forms::Button());
+    this->Lock = (gcnew System::Windows::Forms::Button());
     this->panel1->SuspendLayout();
     this->SuspendLayout();
     // 
@@ -484,12 +501,24 @@ void InitializeComponent(void)
     this->Fire->UseVisualStyleBackColor = true;
     this->Fire->Click += gcnew System::EventHandler(this, &Form1::Fire_Click);
     // 
+    // Lock
+    // 
+    this->Lock->Font = (gcnew System::Drawing::Font(L"Inconsolata", 14));
+    this->Lock->Location = System::Drawing::Point(870, 12);
+    this->Lock->Name = L"Lock";
+    this->Lock->Size = System::Drawing::Size(100, 50);
+    this->Lock->TabIndex = 7;
+    this->Lock->Text = L"Unlock";
+    this->Lock->UseVisualStyleBackColor = true;
+    this->Lock->Click += gcnew System::EventHandler(this, &Form1::Lock_Click);
+    // 
     // Form1
     // 
     this->AutoScaleDimensions = System::Drawing::SizeF(15, 32);
     this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
     this->BackColor = System::Drawing::Color::LightBlue;
     this->ClientSize = System::Drawing::Size(982, 603);
+    this->Controls->Add(this->Lock);
     this->Controls->Add(this->Fire);
     this->Controls->Add(this->panel1);
     this->Controls->Add(this->Right);
@@ -563,6 +592,21 @@ private: System::Void Fire_Click(System::Object^ sender, System::EventArgs^ e) {
     wea.V.vy = wea.Velocity * sin(usrData.pos.angle) * timeInterval;
     wea.counter = int((wea.range / wea.Velocity) * (1 / timeInterval));
 }
+private: System::Void Lock_Click(System::Object^ sender, System::EventArgs^ e) {
+
+    if (tracking_enable == 0)
+    {
+        tracking_enable = 1;
+        Lock->Text = "Lock";
+    }
+    else
+    {
+        tracking_enable = 0;
+        Lock->Text = "Unlock";
+    }
+}
+
+
 }; // end of class Form1
 } // end of namespace CppCLRWinFormsProject
 

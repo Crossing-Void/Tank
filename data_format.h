@@ -1,4 +1,3 @@
-
 struct bits {
 	unsigned char hit : 1;
 	unsigned char speedUp : 1;
@@ -14,7 +13,6 @@ struct position {
 	double pointX;
 	double pointY;
 	double angle;
-
 };
 
 struct speedInformation {
@@ -49,7 +47,7 @@ struct vxy {
 	double vy;
 };
 
-struct enemyProfile
+struct enemyData
 {
 	char name[20];
 	struct position pos;
